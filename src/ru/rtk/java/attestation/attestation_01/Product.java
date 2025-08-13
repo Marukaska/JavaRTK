@@ -1,23 +1,39 @@
 package ru.rtk.java.attestation.attestation_01;
 
+import java.util.Objects;
+
 public class Product {
     private String name;
-    private int price;
+    private double price;
 
-    public Product(String name, int price) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Название не может быть пустым");
-        }
-        if (price < 0) {
-            throw new IllegalArgumentException("Стоимость продукта не может быть отрицательной");
-        }
-        this.name = name;
-        this.price = price;
+    public Product(String name, double price) {
+        setName(name);
+        setPrice(price);
     }
 
     public String getName() { return name; }
 
-    public int getPrice() { return price; }
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Название продукта не может быть пустым");
+        }
+        if (name.length() < 3) {
+            throw new IllegalArgumentException("Название продукта не может быть короче 3 символов");
+        }
+        if (name.matches("\\d+")) {
+            throw new IllegalArgumentException("Название продукта не может содержать только цифры");
+        }
+        this.name = name;
+    }
+
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) {
+        if (price <= 0) {
+            throw new IllegalArgumentException("Стоимость продукта должна быть положительной");
+        }
+        this.price = price;
+    }
 
     @Override
     public String toString() {
@@ -34,7 +50,7 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return name.hashCode() + price;
+        return Objects.hash(name, price);
     }
 }
 
